@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx-multitool
+spec:
+  selector:
+    matchLabels:
+      app: nginx-multitool
+  template:
+    metadata:
+      labels:
+        app: nginx-multitool
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.0
+      - name: multitool
+        image: wbitt/network-multitool:latest
+        env:
+        - name: HTTP_PORT
+          value: "8080"        
