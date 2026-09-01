@@ -278,6 +278,56 @@ Events:
   Normal  Created    70s   kubelet            spec.containers{nginx}: Container created
   Normal  Started    70s   kubelet            spec.containers{nginx}: Container started
 ```
+
+Сервис описан [тут](./task02/service.yaml)
+```bash
+kubectl apply -f task02/service.yaml -n task02
+# service/nginx-multitool-service created
+
+kubectl get svc -n task02
+# NAME                      TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+# nginx-multitool-service   NodePort   10.152.183.85   <none>        80:31382/TCP   108s
+
+kubectl -n task02 get endpoints nginx-multitool-service
+# Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+# NAME                      ENDPOINTS         AGE
+# nginx-multitool-service   10.1.128.221:80   22m
+
+kubectl -n task02 get po -o wide
+# NAME                     READY   STATUS    RESTARTS   AGE   IP             NODE       NOMINATED NODE   READINESS GATES
+# nginx-8547d867cd-gqtl8   1/1     Running   0          12m   10.1.128.221   microk8s   <none>           <none>
+
+kubectl -n task02 port-forward svc/nginx-multitool-service 8181:80
+
+curl http://localhost:8181
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+```
+
+
 ------
 
 ### Правила приема работы
